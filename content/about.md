@@ -6,4 +6,4 @@ draft: false
 
 Hi, I go by vilroi online.
 
-That's about it for now.
+This blog is named after the [sigaltstack(2)](https://www.man7.org/linux/man-pages/man2/sigaltstack.2.html) syscall in Linux.
