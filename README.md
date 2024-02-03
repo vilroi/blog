@@ -1,3 +1,3 @@
 # Personal Blog
 
-[blog.sigatlstack.com](blog.sigaltstack.com)
+[blog.sigaltstack.com](blog.sigaltstack.com)
