@@ -126,7 +126,7 @@ $ arm-none-eabi-objdump -D bin/test.axf
 ...and sure enough the led starts to blink.
 
 ## What is "volatile" anyways?
-According to [Jonathan Valvano and Ramesh Yerraballi](https://users.ece.utexas.edu/~valvano/Volume1/IntroToEmbSys/Ch2_SoftwareDesign.html):
+According to [Chapter 5 of Embedded Systems -- Shape the World](https://users.ece.utexas.edu/~valvano/Volume1/IntroToEmbSys/Ch2_SoftwareDesign.html):
 > The volatile qualifier modifies a variable disabling compiler optimization, forcing the compiler to fetch a new value each time. We will use volatile when defining I/O ports because the value of ports can change outside of software action. We will also use volatile when sharing a global variable between the main program and an interrupt service routine.
 
 If we look at the following snippet of code (**without** `volatile`):
@@ -195,5 +195,6 @@ However, at the time I have glossed over the details of why it was necessary, re
 Although it resulted in a fun tangent researching and learning some ARM-related stuff -- as well as a blog post : ) -- I probably should have paid more attention to it.
 
 ## Additional Resources
+- [Embedded Systems -- Shape The World Chapter 5](https://users.ece.utexas.edu/~valvano/Volume1/E-Book/C5_IntroductionToC.htm)
 - [GNU Manual: volatile Variables and Fields](https://www.gnu.org/software/c-intro-and-ref/manual/html_node/volatile.html)
 - [Explaining the C Keyword Volatile](https://embedded.fm/blog/2017/2/23/explaining-the-c-keyword-volatile)
