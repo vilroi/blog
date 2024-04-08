@@ -50,19 +50,21 @@ While most of the code has been left out for the sake of brevity, elsewhere in t
 
 The main loop checks if the flag has been set by the timer, and toggles an LED.
 
-The following is an excerpt from the documentation:
+The following is an excerpt from the [data sheet](https://www.ti.com/lit/ds/spms376e/spms376e.pdf?ts=1712554526265&ref_url=https%253A%252F%252Fwww.ti.com%252Ftool%252FEK-TM4C123GXL):
+![](/static/systick_register.png)
 
 ## The Strange Infinite Loop
-I built the code and loaded it onto the board, but does not light the LED at all.
+I built the code and loaded it onto the board, but the LED doesn't blink at all.
 
-Ok, cool. What did I mess up? 
+Okay, cool. What did I mess up? 
 
 Perhaps I'm checking the wrong bit? 
+
 Maybe I configured the timer incorrectly, or maybe it's not enabled at all.
 
 After checking my code and stepping through it with ```gdb```, however, I notice that it's stuck in an infinite loop, at a single address.
 
-I tried disassembling the code, and see the following:
+I tried disassembling the code, and saw the following:
 ```shell
 (remote) gef➤  x/5i $pc
 => 0x2e0 <main+20>:     b.n     0x2e0 <main+20>     <-- infinite loop, stuck at address 0x2e0
@@ -74,7 +76,7 @@ I tried disassembling the code, and see the following:
 
 ???
 
-The following is the disassembly of main:
+I then disassembled the whole `main()` function:
 ```shell
 (remote) gef➤  disassemble main
 Dump of assembler code for function main:
@@ -101,11 +103,17 @@ Eventually, I came accross the following:
           (*((volatile uint32_t *)(x)))
 ```
 
-This is the macro used to access memory-mapped addresses.
+This is the macro used by the library to access memory-mapped addresses.
 
 I had defined something similar, except without the ```volatile``` qualifier.
 
 Could this be it?
+
+I added the `volatile` qualifier and rebuilt the code:
+
+```c
+#define DEFINE_SYSTICK_REGISTER(offset)     *((volatile uint32_t *) (SYSTICK_BASE_R + offset))
+```
 
 ```shell
 $ arm-none-eabi-objdump -D bin/test.axf
@@ -122,13 +130,13 @@ $ arm-none-eabi-objdump -D bin/test.axf
 .....
 ```
 
-...and sure enough the led starts to blink.
+...and sure enough the LED started to blink.
 
 ## What is "volatile" anyways?
 According to [Chapter 5 of Embedded Systems -- Shape the World](https://users.ece.utexas.edu/~valvano/Volume1/IntroToEmbSys/Ch2_SoftwareDesign.html):
 > The volatile qualifier modifies a variable disabling compiler optimization, forcing the compiler to fetch a new value each time. We will use volatile when defining I/O ports because the value of ports can change outside of software action. We will also use volatile when sharing a global variable between the main program and an interrupt service routine.
 
-If we look at the following snippet of code (**without** `volatile`):
+If we go back to the code (**no** `volatile`):
 ```c
 while (1) {
     if (*((uint32_t *) ((0xe000e000) + 0x10)) & 0x10000)
@@ -152,7 +160,7 @@ It is oblivious to the fact that the value at the address can (and will) be modi
    0x000002e6 <+26>:    b.n     0x2da <main+14>
 ```
 
-If in the inital check the flag is not set, the code locks itsself into an infinite loop at 0x2e0, preventing it from taking the path of 0x2e2, which toggles the LED and loops back to 0x2da.
+If in the inital check the flag is not set, the code locks itself into an infinite loop at 0x2e0, preventing it from taking the path of 0x2e2, which toggles the LED and loops back to 0x2da.
 
 From the compiler's point of view, there is no point in re-checking the bit, as it is never modified.
 
@@ -184,16 +192,18 @@ While this modification is utterley pointless, it did get rid of the infinite lo
 
 I do wonder what would happen if the bit was set before the first check, however.
 
-I assume it will just loop until the bit is unset again, and then go into the infinite loop again (which is kind of weird in my opinion).
+I assume it will just loop until the bit is unset again, and then go into the infinite loop once the bit is unset (which is kind of weird in my opinion).
 
 ## Closing Remarks
-What makes this experience kind of absurd is that I have actually read about the necessity of volatile in the past.
+What makes this experience somewhat of absurd is that I have actually read about the necessity of `volatile` in the past.
 
-However, at the time I have glossed over the details of why it was necessary, resulting in the issue above.
+However, I had glossed over the details of why it was necessary.
 
-Although it resulted in a fun tangent researching and learning some ARM-related stuff -- as well as a blog post : ) -- I probably should have paid more attention to it.
+Although this resulted in a fun tangent of researching and learning some ARM-related stuff --as well as a blog post : ) -- I probably should have paid more attention to it.
 
 ## Additional Resources
-- [Embedded Systems -- Shape The World Chapter 5](https://users.ece.utexas.edu/~valvano/Volume1/E-Book/C5_IntroductionToC.htm)
-- [GNU Manual: volatile Variables and Fields](https://www.gnu.org/software/c-intro-and-ref/manual/html_node/volatile.html)
-- [Explaining the C Keyword Volatile](https://embedded.fm/blog/2017/2/23/explaining-the-c-keyword-volatile)
+[Embedded Systems -- Shape The World Chapter 5](https://users.ece.utexas.edu/~valvano/Volume1/E-Book/C5_IntroductionToC.htm)
+
+[GNU Manual: volatile Variables and Fields](https://www.gnu.org/software/c-intro-and-ref/manual/html_node/volatile.html)
+
+[Explaining the C Keyword Volatile](https://embedded.fm/blog/2017/2/23/explaining-the-c-keyword-volatile)
