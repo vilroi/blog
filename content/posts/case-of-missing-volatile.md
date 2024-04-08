@@ -1,5 +1,5 @@
 ---
-title: "Case of the Forgotten \'volatile\'"
+title: "Case of the Forgotten \'volatile\' Qualifier"
 date: 2024-04-07T11:38:59-07:00
 draft: true
 ---
