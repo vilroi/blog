@@ -1,10 +1,10 @@
 ---
-title: "The Case of the Missing \"voatile\""
+title: "Case of the Forgotten \'volatile\'"
 date: 2024-04-07T11:38:59-07:00
 draft: true
 ---
 ## Background
-I had gotten back to tinkering with embedded stuff recently, and was writing some test code to get a better understanding of how timers worked.
+I had gotten back into tinkering with embedded stuff recently, and was writing some test code to get a better understanding of timers.
 
 Specifically, I had written something like the following to be run on the [EK-TM4C123GXL Evaluation Board](https://www.ti.com/tool/EK-TM4C123GXL):
 
@@ -32,7 +32,7 @@ and
 #define DEFINE_SYSTICK_REGISTER(offset)     *((uint32_t *) (SYSTICK_BASE_R + offset))
 ```
 
-which basically becomes:
+which basically becomes the following after going through the pre-processor:
 ```c
 int main(void) {
     init();
@@ -45,7 +45,6 @@ int main(void) {
 }
 ```
 
-after going through the pre-processor.
 
 While most of the code has been left out for the sake of brevity, elsewhere in the code the systick timer is configured and enabled to set a flag in the STCTRL register (bit 16 of address 0xe000e010) every second.
 
