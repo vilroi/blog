@@ -4,7 +4,7 @@ date: 2024-04-07T11:38:59-07:00
 draft: true
 ---
 ## Background
-I had gotten back into tinkering with embedded stuff recently, and was writing some test code to get a better understanding of timers.
+I had gotten back into tinkering with embedded stuff recently, and was writing some test code to get a better understanding of how timers work.
 
 Specifically, I had written something like the following to be run on the [EK-TM4C123GXL Evaluation Board](https://www.ti.com/tool/EK-TM4C123GXL):
 
@@ -38,6 +38,7 @@ int main(void) {
     init();
 
     init_timer();
+
     while (1) {
         if (*((uint32_t *) ((0xe000e000) + 0x10)) & 0x10000)
             toggle_led();
@@ -46,9 +47,9 @@ int main(void) {
 ```
 
 
-While most of the code has been left out for the sake of brevity, elsewhere in the code the systick timer is configured and enabled to set a flag in the STCTRL register (bit 16 of address 0xe000e010) every second.
+While most of the code has been left out for the sake of brevity, elsewhere in the code the systick timer is configured and enabled. 
 
-The main loop checks if the flag has been set by the timer, and toggles an LED.
+Every five seconds the bit 16 of the STCTRL register (address 0x000e010) is set by the timer, and an on-board LED is toggled when this is detected.
 
 The following is an excerpt from the [data sheet](https://www.ti.com/lit/ds/spms376e/spms376e.pdf?ts=1712554526265&ref_url=https%253A%252F%252Fwww.ti.com%252Ftool%252FEK-TM4C123GXL):
 
@@ -63,7 +64,7 @@ Perhaps I'm checking the wrong bit?
 
 Maybe I configured the timer incorrectly, or maybe it's not enabled at all.
 
-After checking my code and stepping through it with ```gdb```, however, I notice that it's stuck in an infinite loop, at a single address.
+After checking my code and stepping through it with ```gdb```, however, I noticed that it was stuck in an infinite loop at a single address.
 
 I tried disassembling the code, and saw the following:
 ```console
@@ -133,7 +134,7 @@ $ arm-none-eabi-objdump -D bin/test.axf
 
 ...and sure enough the LED started to blink.
 
-## What is "volatile" anyways?
+## What is "volatile" Anyways?
 According to [Chapter 5 of Embedded Systems -- Shape the World](https://users.ece.utexas.edu/~valvano/Volume1/IntroToEmbSys/Ch2_SoftwareDesign.html):
 > The volatile qualifier modifies a variable disabling compiler optimization, forcing the compiler to fetch a new value each time. We will use volatile when defining I/O ports because the value of ports can change outside of software action. We will also use volatile when sharing a global variable between the main program and an interrupt service routine.
 
@@ -146,7 +147,7 @@ while (1) {
 ```
 ...as far as the compiler is concerned, the contents of the address is only read, and never modified within the loop.
 
-It is oblivious to the fact that the value at the address can (and will) be modified by some outside factor -- in this case, the hardware peripheral.
+It is oblivious to the fact that the value at the address can (and will) be modified by some outside factor; in this case, the hardware peripheral.
 
 ```console
    0x000002cc <+0>:     push    {r3, lr}
@@ -161,11 +162,11 @@ It is oblivious to the fact that the value at the address can (and will) be modi
    0x000002e6 <+26>:    b.n     0x2da <main+14>
 ```
 
-If in the inital check the flag is not set, the code locks itself into an infinite loop at 0x2e0, preventing it from taking the path of 0x2e2, which toggles the LED and loops back to 0x2da.
+If in the inital check the flag is not set, the code locks itself into an infinite loop at `0x000002e0`, preventing it from taking the path of `0x000002e2`, which toggles the LED and loops back to `0x000002da`.
 
 From the compiler's point of view, there is no point in re-checking the bit, as it is never modified.
 
-I have tried modifying the code in the folloing way, and tried disassembling it again.
+I have tried modifying the code in the following way, and tried disassembling it again.
 ```c
 while (1) {
     if (SYSTICK_STCTRL_R & SYSTICK_COUNT_FLAG) 
@@ -196,9 +197,9 @@ I do wonder what would happen if the bit was set before the first check, however
 I assume it will just loop until the bit is unset again, and then go into the infinite loop once the bit is unset (which is kind of weird in my opinion).
 
 ## Closing Remarks
-What makes this experience somewhat of absurd is that I have actually read about the necessity of `volatile` in the past.
+What makes this experience somewhat absurd is that I had actually read about the necessity of `volatile` when accessing memory-mapped peripherals in the past.
 
-However, I had glossed over the details of why it was necessary.
+However I had glossed over the details of why it was necessary, and had kind of forgotten about it.
 
 Although this resulted in a fun tangent of researching and learning some ARM-related stuff --as well as a blog post : ) -- I probably should have paid more attention to it.
 
