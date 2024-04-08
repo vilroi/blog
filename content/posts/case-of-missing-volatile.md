@@ -104,7 +104,7 @@ Eventually, I came accross the following:
           (*((volatile uint32_t *)(x)))
 ```
 
-This is the macro used by the library to access memory-mapped addresses.
+This is the macro used by the library to do memory-mapped IO.
 
 I had defined something similar, except without the ```volatile``` qualifier.
 
