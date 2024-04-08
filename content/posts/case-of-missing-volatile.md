@@ -51,6 +51,7 @@ While most of the code has been left out for the sake of brevity, elsewhere in t
 The main loop checks if the flag has been set by the timer, and toggles an LED.
 
 The following is an excerpt from the [data sheet](https://www.ti.com/lit/ds/spms376e/spms376e.pdf?ts=1712554526265&ref_url=https%253A%252F%252Fwww.ti.com%252Ftool%252FEK-TM4C123GXL):
+
 ![](/static/systick_register.png)
 
 ## The Strange Infinite Loop
