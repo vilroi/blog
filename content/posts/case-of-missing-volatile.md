@@ -66,7 +66,7 @@ Maybe I configured the timer incorrectly, or maybe it's not enabled at all.
 After checking my code and stepping through it with ```gdb```, however, I notice that it's stuck in an infinite loop, at a single address.
 
 I tried disassembling the code, and saw the following:
-```shell
+```console
 (remote) gef➤  x/5i $pc
 => 0x2e0 <main+20>:     b.n     0x2e0 <main+20>     <-- infinite loop, stuck at address 0x2e0
    0x2e2 <main+22>:     bl      0x288 <toggle_led>
@@ -78,7 +78,7 @@ I tried disassembling the code, and saw the following:
 ???
 
 I then disassembled the whole `main()` function:
-```shell
+```console
 (remote) gef➤  disassemble main
 Dump of assembler code for function main:
    0x000002cc <+0>:     push    {r3, lr}
@@ -116,7 +116,7 @@ I added the `volatile` qualifier and rebuilt the code:
 #define DEFINE_SYSTICK_REGISTER(offset)     *((volatile uint32_t *) (SYSTICK_BASE_R + offset))
 ```
 
-```shell
+```console
 $ arm-none-eabi-objdump -D bin/test.axf
 000002cc <main>:
  2cc:   b508            push    {r3, lr}
@@ -148,7 +148,7 @@ while (1) {
 
 It is oblivious to the fact that the value at the address can (and will) be modified by some outside factor -- in this case, the hardware peripheral.
 
-```shell
+```console
    0x000002cc <+0>:     push    {r3, lr}
    0x000002ce <+2>:     bl      0x298 <init>
    0x000002d2 <+6>:     bl      0x26c <init_timer>
@@ -175,7 +175,7 @@ while (1) {
 ```
 
 The results are as follows:
-```c
+```console
  2cc:   b508            push    {r3, lr}
  2ce:   f7ff ffe3       bl      298 <init>
  2d2:   f7ff ffcb       bl      26c <init_timer>
