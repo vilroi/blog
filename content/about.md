@@ -9,3 +9,5 @@ Hi, I go by vilroi online.
 This blog is intended to be a public repository of my notes, on-going projects, and more.
 
 In case you're curious, the domain is taken from the [sigaltstack(2)](https://www.man7.org/linux/man-pages/man2/sigaltstack.2.html) syscall in \*nix like operating systems.
+
+I have no affiliation with any of the product links I post on this blog.
