@@ -1,5 +1,5 @@
 ---
-title: "Kea, Raw Sockets, and Icmp"
+title: "Kea, Raw Sockets, and ICMP"
 date: 2024-05-04T08:26:17-07:00
 draft: true
 toc: false
@@ -86,3 +86,46 @@ main(void)
 The following is a short demo:
 
 {{<video src="/static/icmp_server.webm" type="video/webm" preload="auto">}}
+
+Pretty cool.
+
+### Interesting ICMP Behaviors
+Here are some interesting things I encountered while working on the above.
+
+#### Truncated
+This happened when I tried to send icmp packet with no data at all (only the IP header and ICMP header).
+
+```console
+[vilr0i@cyberia ~]$ ping 192.168.122.141
+PING 192.168.122.141 (192.168.122.141) 56(84) bytes of data.
+8 bytes from 192.168.122.141: icmp_seq=1 ttl=64 (truncated)
+8 bytes from 192.168.122.141: icmp_seq=2 ttl=64 (truncated)
+8 bytes from 192.168.122.141: icmp_seq=3 ttl=64 (truncated)
+8 bytes from 192.168.122.141: icmp_seq=4 ttl=64 (truncated)
+8 bytes from 192.168.122.141: icmp_seq=5 ttl=64 (truncated)
+^C
+```
+
+#### Wrong Data Byte
+The following occurred when the data portion for the icmp message had been filled with zeros.
+
+```console
+[vilr0i@cyberia ~]$ ping 192.168.122.141
+PING 192.168.122.141 (192.168.122.141) 56(84) bytes of data.
+64 bytes from 192.168.122.141: icmp_seq=1 ttl=64 time=1714850526716 ms
+wrong data byte #16 should be 0x10 but was 0x0
+#16     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+#48     0 0 0 0 0 0 0 0 
+64 bytes from 192.168.122.141: icmp_seq=2 ttl=64 time=1714850527717 ms
+wrong data byte #16 should be 0x10 but was 0x0
+#16     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+#48     0 0 0 0 0 0 0 0 
+```
+
+### Resources and Further Reading
+
+- [raw(7)](https://www.man7.org/linux/man-pages/man7/raw.7.html)
+- [packet(7)](https://www.man7.org/linux/man-pages/man7/packet.7.html)
+- [C Language Examples of IPv4 and IPv6 Raw Sockets for Linux](https://pdbuchan.com/rawsock/rawsock.html)
+- [RFC 792: Internet Control Message Protocol](https://www.rfc-editor.org/rfc/rfc792)
+- [Golang Implementation of IP Checksum Calculation](https://github.com/google/netstack/blob/55fcc16cd0eb/tcpip/header/checksum.go#L52)
