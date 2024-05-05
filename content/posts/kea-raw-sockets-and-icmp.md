@@ -11,17 +11,23 @@ tags:
 
 The other day I was taking a look at [kea](https://kea.readthedocs.io/en/latest/index.html), the open-source DHCP server from ISC for my home network.
 
-I installed kea on my gateway, made the minimal configurations necessary to get started. 
+I installed kea on my gateway, made the minimal initial configurations, and fired it up.
 
-After that I and checked my laptop, and  confirmed that it had successfully been assigned an IP address from the range I had configured. 
+Then I checked my laptop and confirmed that it had successfully been assigned an IP address from the range I had allocated. 
 
-Neat.
+So far so good.
 
-I was about to move on to further skim through the documentation, but then had a realization:
+I was about to proceed to checking out other parts of the configuration and the documentation.
 
-> "Wait a minute, I haven't enabled port 67 on my gateway yet. How is it accepting DHCP requests?"
+However, I had a sudden realization:
 
-Reconfirming my firewall rules with iptables, indeed port 67 had not been enabled, and my default policy had been set to DROP as intended.
+> "Wait a minute, I haven't enabled port 67 on my gateway's firewall. How is it accepting DHCP requests?"
+
+All of my machines are configured so that it drops any ingress traffic by default.
+
+My gateway is no exception to this. Sure enough port 67 had not been enabled when I confirmed my firewall rules with iptables.
+
+What gives?
 
 Then I remembered reading something about raw sockets in the config file.
 
@@ -35,15 +41,17 @@ From `kea-dhcp4.conf`:
 // "dhcp-socket-type": "udp"
 ```
 
-More specifically, kea uses a raw socket with AF_PACKET. 
+### \#\# Raw Sockets
 
-Packet sockets allow a program to send and receive layer 2 frames without the kernel's intervention.
+More specifically, kea uses a raw socket with the address family set to AF_PACKET. 
+
+Packet sockets allow a process to send and receive layer 2 frames without the kernel's intervention.
 
 That is, when data is received on the network interface it is handed to the user space process without being processed by the kernel.
 
 ![](https://www.opensourceforu.com/wp-content/uploads/2015/03/Figure-11-1-350x108.jpg)
 
-This explains why `kea` had been able to respond to DHCP requests despite it not being allowed in `iptables`; the packets simply by-pass the kernel where the packet headers are inspected.
+This explains why kea had been able to respond to DHCP requests despite it being disabled in iptables; the packets simply by-pass the kernel where the packet headers would be inspected.
 
 In order to demonstrate this idea, I wrote an ICMP "echo server" which listens for ICMP Echo Requests and replies to them. 
 
@@ -87,12 +95,10 @@ The following is a short demo:
 
 {{<video src="/static/icmp_server.webm" type="video/webm" preload="auto">}}
 
-Pretty cool.
-
-### Interesting ICMP Behaviors
+### \#\# Interesting ICMP Behaviors
 Here are some interesting things I encountered while working on the above.
 
-#### Truncated
+#### \#\#\# Truncated
 This happened when I tried to send icmp packet with no data at all (only the IP header and ICMP header).
 
 ```console
@@ -106,7 +112,7 @@ PING 192.168.122.141 (192.168.122.141) 56(84) bytes of data.
 ^C
 ```
 
-#### Wrong Data Byte
+#### \#\#\# Wrong Data Byte
 The following occurred when the data portion for the icmp message had been filled with zeros.
 
 ```console
@@ -122,7 +128,7 @@ wrong data byte #16 should be 0x10 but was 0x0
 #48     0 0 0 0 0 0 0 0 
 ```
 
-### Resources and Further Reading
+### \#\# Resources and Further Reading
 
 - [raw(7)](https://www.man7.org/linux/man-pages/man7/raw.7.html)
 - [packet(7)](https://www.man7.org/linux/man-pages/man7/packet.7.html)
