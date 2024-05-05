@@ -115,7 +115,7 @@ disableHugoGeneratorInject = false
   #
   [params.footer]
     trademark = 2024
-    rss = false
+    rss = true
     copyright = true
     author = true
 

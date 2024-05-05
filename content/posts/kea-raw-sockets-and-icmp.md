@@ -9,15 +9,15 @@ tags:
   - networking
 ---
 
-The other day I was taking a look at [kea](https://kea.readthedocs.io/en/latest/index.html), the open-source DHCP server from ISC for my home network.
+The other day I was taking a look at [kea](https://kea.readthedocs.io/en/latest/index.html), an open-source DHCP server from ISC for my home network.
 
-I installed kea on my gateway, made the minimal initial configurations, and fired it up.
+I installed it on my gateway, made the minimal initial configurations, and fired it up.
 
 Then I checked my laptop and confirmed that it had successfully been assigned an IP address from the range I had allocated. 
 
 So far so good.
 
-I was about to proceed to checking out other parts of the configuration and the documentation.
+I was about to proceed to checking out the other parts of the configuration and the documentation.
 
 However, I had a sudden realization:
 
@@ -43,7 +43,7 @@ From `kea-dhcp4.conf`:
 
 ### \#\# Raw Sockets
 
-More specifically, kea uses a raw socket with the address family set to AF_PACKET. 
+Specifically, kea uses a raw socket with the address family set to AF_PACKET. 
 
 Packet sockets allow a process to send and receive layer 2 frames without the kernel's intervention.
 
@@ -53,7 +53,7 @@ That is, when data is received on the network interface it is handed to the user
 
 This explains why kea had been able to respond to DHCP requests despite it being disabled in iptables; the packets simply by-pass the kernel where the packet headers would be inspected.
 
-In order to demonstrate this idea, I wrote an ICMP "echo server" which listens for ICMP Echo Requests and replies to them. 
+In order to demonstrate this idea, I wrote an ICMP "echo server"[^1] which listens for ICMP Echo Requests and replies to them. 
 
 The following is an excerpt from the code. The full source code can be found [here](https://github.com/vilroi/lab/tree/main/raw/icmp_echo_server).
 
@@ -99,7 +99,7 @@ The following is a short demo:
 Here are some interesting things I encountered while working on the above.
 
 #### \#\#\# Truncated
-This happened when I tried to send icmp packet with no data at all (only the IP header and ICMP header).
+This happened when I tried to send an icmp packet with no data (only the IP header and ICMP header).
 
 ```console
 [vilr0i@cyberia ~]$ ping 192.168.122.141
@@ -134,4 +134,6 @@ wrong data byte #16 should be 0x10 but was 0x0
 - [packet(7)](https://www.man7.org/linux/man-pages/man7/packet.7.html)
 - [C Language Examples of IPv4 and IPv6 Raw Sockets for Linux](https://pdbuchan.com/rawsock/rawsock.html)
 - [RFC 792: Internet Control Message Protocol](https://www.rfc-editor.org/rfc/rfc792)
-- [Golang Implementation of IP Checksum Calculation](https://github.com/google/netstack/blob/55fcc16cd0eb/tcpip/header/checksum.go#L52)
+- [Implementation of IP Checksum Calculation in Go](https://github.com/google/netstack/blob/55fcc16cd0eb/tcpip/header/checksum.go#L52)
+
+[^1]: Yes, the notion of an ICMP Echo Server doesn't make much sense. ICMP is usually handled in layer 3 (the kernel, etc), so if a device receives an ICMP Echo request, a Reply is made independent to any user-space processes. In fact, if you run the program I wrote on a machine where ICMP is **not** disabled, it results in the client receiving a duplicate Reply.
