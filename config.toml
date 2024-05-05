@@ -1,4 +1,4 @@
-baseURL = "blog.sigaltstack.com"
+baseURL = "https://blog.sigaltstack.com"
 title   = "𝙽̶𝚘̶𝚝̶ 𝙽̶𝚎̶𝚌̶𝚎̶𝚜̶𝚜̶𝚊̶𝚛̶𝚒̶𝚕̶𝚢̶ 𝙿̶𝚛̶𝚊̶𝚌̶𝚝̶𝚒̶𝚌̶𝚊̶𝚕̶"
 languageCode = "en-us"
 theme = "hello-friend-ng"

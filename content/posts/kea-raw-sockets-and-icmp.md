@@ -131,9 +131,13 @@ wrong data byte #16 should be 0x10 but was 0x0
 ### \#\# Resources and Further Reading
 
 - [raw(7)](https://www.man7.org/linux/man-pages/man7/raw.7.html)
+
 - [packet(7)](https://www.man7.org/linux/man-pages/man7/packet.7.html)
+
 - [C Language Examples of IPv4 and IPv6 Raw Sockets for Linux](https://pdbuchan.com/rawsock/rawsock.html)
+
 - [RFC 792: Internet Control Message Protocol](https://www.rfc-editor.org/rfc/rfc792)
+
 - [Implementation of IP Checksum Calculation in Go](https://github.com/google/netstack/blob/55fcc16cd0eb/tcpip/header/checksum.go#L52)
 
 [^1]: Yes, the notion of an ICMP Echo Server doesn't make much sense. ICMP is usually handled in layer 3 (the kernel, etc), so if a device receives an ICMP Echo request, a Reply is made independent to any user-space processes. In fact, if you run the program I wrote on a machine where ICMP is **not** disabled, it results in the client receiving a duplicate Reply.
