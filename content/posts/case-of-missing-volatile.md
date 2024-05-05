@@ -1,7 +1,7 @@
 ---
 title: "Case of the Forgotten \'volatile\' Qualifier"
 date: 2024-04-07T11:38:59-07:00
-draft: true
+draft: false
 ---
 ## Background
 I had gotten back into tinkering with embedded stuff recently, and was writing some test code to get a better understanding of how timers work.
