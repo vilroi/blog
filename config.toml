@@ -28,7 +28,7 @@ enableRobotsTXT = true
 enableGitInfo   = false
 enableEmoji     = true
 enableMissingTranslationPlaceholders = false
-disableRSS     = true
+disableRSS     = false
 disableSitemap = true
 disable404     = false
 disableHugoGeneratorInject = false
@@ -41,8 +41,8 @@ disableHugoGeneratorInject = false
 
 [taxonomies]
   tag      = "tags"
-  category = "categories"
-  series   = "series"
+  #category = "categories"
+  #series   = "series"
 
 [params]
   [params.author]
