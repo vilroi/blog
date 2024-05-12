@@ -3,6 +3,8 @@ theme = "smol"
 language="en-us"
 baseURL = "https://blog.sigaltstack.com"
 
+rssLimit = 20
+
 enableRobotsTxt = true
 hasCJKLanguage = true
 dieable404 = false
@@ -39,6 +41,12 @@ summaryLength = 30
         name = "Github"
         url = "https://github.com/vilroi"
         weight = 1 
+
+  [[menu.footer]]
+        name = "rss"
+        url = "https://blog.sigaltstack.com/index.xml"
+        weight = 2 
+
 
 # Taxonomies
 [taxomomies]
