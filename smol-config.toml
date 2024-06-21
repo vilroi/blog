@@ -1,0 +1,53 @@
+title = "𝙽̶𝚘̶𝚝̶ 𝙽̶𝚎̶𝚌̶𝚎̶𝚜̶𝚜̶𝚊̶𝚛̶𝚒̶𝚕̶𝚢̶ 𝙿̶𝚛̶𝚊̶𝚌̶𝚝̶𝚒̶𝚌̶𝚊̶𝚕̶"
+theme = "smol"
+language="en-us"
+baseURL = "https://blog.sigaltstack.com"
+
+rssLimit = 20
+
+enableRobotsTxt = true
+hasCJKLanguage = true
+dieable404 = false
+
+summaryLength = 30
+
+# Parameters
+[params]
+    subtitle = "vilroi's blog"
+    dateFmt = "02.01.2006 15:04"
+
+# Header
+[menu]
+  [[menu.main]]
+        identifier = "posts"
+        name = "Posts"
+        url = "/posts/"
+        weight = 1 
+
+  [[menu.main]]
+        identifier = "tags"
+        name = "Tags"
+        url = "/tags/"
+        weight = 2
+
+  [[menu.main]]
+        identifier = "about"
+        name = "About"
+        url = "/about/"
+        weight = 3
+
+# Footer
+  [[menu.footer]]
+        name = "Github"
+        url = "https://github.com/vilroi"
+        weight = 1 
+
+  [[menu.footer]]
+        name = "rss"
+        url = "https://blog.sigaltstack.com/index.xml"
+        weight = 2 
+
+
+# Taxonomies
+[taxomomies]
+	tag = 'tags'
