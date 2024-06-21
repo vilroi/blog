@@ -3,7 +3,7 @@ title: "Notes on Go Interfaces"
 date: 2024-05-30T09:31:45-07:00
 slug: 2024-05-30-notes-on-interfaces
 type: posts
-draft: true
+draft: false
 categories:
   - default
 tags:
@@ -19,7 +19,7 @@ Any type which implements the methods defined in the set can be treated as that 
 - while *x* and *y* are distinct types, they can both be treated as type *a*
 
 As an example, consider the types `net.HardwareAddr` and `netip.Addr`. 
-Since both of these types implement the `String()` method, by the definition of the `fmt.Stringer` interface, both of these types can be treated as a `fmt.Stringer`.
+Since both of these types implement the `String()` method, according to the definition of the `fmt.Stringer` interface, both of these types can be treated as a `fmt.Stringer`.
 
 Thus, something like the following is possible:
 
@@ -66,7 +66,7 @@ func check(e error) {
 
 ## The 'interface\{\}'  Type
 
-The `interface{}` type, also known as the `any`, is defined as an interface with zero methods.
+The `interface{}` type, also known as `any`, is defined as an interface with zero methods -- that is, an empty set.
 
 Since all types in go by definition define zero or more methods, all types can be treated as an `interface{}`.
 
@@ -99,6 +99,8 @@ string
 []net.HardwareAddr
 ```
 
+
+## Dissecting an 'interface\{\}'
 How is it even possible to have a type which represents  all possible types?
 
 How is it implemented, and how is it represented in memory?
@@ -139,7 +141,7 @@ Here, I am inspecting the memory layout of a `string` passed as an `interface{}`
 (*interface {})(0xc000090500)
 *interface {}(string) "hello friend"
 
-(dlv) x -count 2 -size 8 0xc000090500
+(dlv) x -count 2 -size 8 0xc000090500   # dereferencing the address of the interface{}
 0xc000090500:   0x00000000004b5a60   0x000000c0000904f0   
 
 (dlv) x -count 8 -size 8 0x000000c0000904f0     # address of string, length 12 bytes
@@ -188,10 +190,10 @@ type Type struct {
 0x4b5a98:   0x10   0x00   0x00   0x00   0x00   0x00   0x00   0x00   
 ```
 
-We could deduce that we are indeed looking at the raw bytes of an `abi.Type` by cross-referencing a few fields. In this case, we will look at the following fields:
+We could deduce that we are indeed looking at the raw bytes of an `abi.Type` by cross-referencing a few fields. In this case, we will look at the following:
 - Size_: 0x10 (16). Since a `string` is composed of a pointer to the data (8 bytes on x64) and the size field (8 bytes), this checks out.
-- Kind_: 0x18 (24). The Kind_ field corresponds to `abi.String`.
-- Str: 0x10d2 (4306). The Str field is used to retrieve the string representation of a type. It contains an offset into [`moduledata.type`](https://github.com/golang/go/blob/master/src/runtime/symtab.go#L388), which in the case of an ELF file in linux points to the `.rodata` section. We could dump the data in `.rodata` as follows:
+- Kind_: 0x18 (24). The Kind_ field corresponds to the constant `abi.String`.
+- Str: 0x10d2 (4306). The Str field is used to retrieve the string representation of a type. It contains an offset into [`moduledata.type`](https://github.com/golang/go/blob/master/src/runtime/symtab.go#L388), which in the case of an ELF file in linux contains the address of the `.rodata` section. We could dump the data in `.rodata` as follows:
 
 ```console
 [vilroi@cyberia re-go]$ readelf -S __debug_bin3017757378 | grep rodata
@@ -207,4 +209,4 @@ We could deduce that we are indeed looking at the raw bytes of an `abi.Type` by 
 - https://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go
 - https://research.swtch.com/interfaces
 - https://cloud.google.com/blog/topics/threat-intelligence/golang-internals-symbol-recovery/
-- code used to determine `moduledata.type`: https://github.com/vilroi/lab/tree/main/get_moduledata_type
+- [The code used to determine the value of `moduledata.type`](https://github.com/vilroi/lab/tree/main/gomoduledata)
