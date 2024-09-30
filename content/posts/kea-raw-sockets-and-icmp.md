@@ -41,7 +41,7 @@ From `kea-dhcp4.conf`:
 // "dhcp-socket-type": "udp"
 ```
 
-### \#\# Raw Sockets
+## Raw Sockets
 
 Specifically, kea uses a raw socket with the address family set to AF_PACKET. 
 
@@ -95,10 +95,10 @@ The following is a short demo:
 
 {{<video src="/static/icmp_server.webm" type="video/webm" preload="auto">}}
 
-### \#\# Interesting ICMP Behaviors
+## Interesting ICMP Behaviors
 Here are some interesting things I encountered while working on the above.
 
-#### \#\#\# Truncated
+### Truncated
 This happened when I tried to send an icmp packet with no data (only the IP header and ICMP header).
 
 ```console
@@ -112,7 +112,7 @@ PING 192.168.122.141 (192.168.122.141) 56(84) bytes of data.
 ^C
 ```
 
-#### \#\#\# Wrong Data Byte
+### Wrong Data Byte
 The following occurred when the data portion for the icmp message had been filled with zeros.
 
 ```console
@@ -128,16 +128,11 @@ wrong data byte #16 should be 0x10 but was 0x0
 #48     0 0 0 0 0 0 0 0 
 ```
 
-### \#\# Resources and Further Reading
-
+## Resources and Further Reading
 - [raw(7)](https://www.man7.org/linux/man-pages/man7/raw.7.html)
-
 - [packet(7)](https://www.man7.org/linux/man-pages/man7/packet.7.html)
-
 - [C Language Examples of IPv4 and IPv6 Raw Sockets for Linux](https://pdbuchan.com/rawsock/rawsock.html)
-
 - [RFC 792: Internet Control Message Protocol](https://www.rfc-editor.org/rfc/rfc792)
-
 - [Implementation of IP Checksum Calculation in Go](https://github.com/google/netstack/blob/55fcc16cd0eb/tcpip/header/checksum.go#L52)
 
 [^1]: Yes, the notion of an ICMP Echo Server doesn't make much sense. ICMP is usually handled in layer 3 (the kernel, etc), so if a device receives an ICMP Echo request, a Reply is made independent to any user-space processes. In fact, if you run the program I wrote on a machine where ICMP is **not** disabled, it results in the client receiving a duplicate Reply.
