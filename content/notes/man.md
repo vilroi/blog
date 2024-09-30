@@ -1,7 +1,9 @@
 ---
 title: "Man Pages"
 date: 2024-09-21T15:59:48-07:00
-draft: true
+draft: false
+tags:
+  - notes
 ---
 
 ## Loading the Output of man(1) into vim(1)

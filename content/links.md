@@ -1,7 +1,7 @@
 ---
 title: "Links and Resources"
 date: 2024-09-23T09:21:41-07:00
-draft: true
+draft: false
 ---
 ### ELF
 - https://blog.k3170makan.com/

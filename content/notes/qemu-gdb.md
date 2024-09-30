@@ -1,7 +1,9 @@
 ---
 title: "Remote Debugging with gdb and qemu"
 date: 2024-09-21T15:59:49-07:00
-draft: true
+draft: false
+tags: 
+  - notes
 ---
 
 ## Starting qemu with debug options

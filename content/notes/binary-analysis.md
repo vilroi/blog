@@ -1,7 +1,11 @@
 ---
-title: "Binary Analysis"
+title: "Binary Tools"
 date: 2024-09-22T08:17:44-07:00
-draft: true
+draft: false
+tags:
+  - notes
+  - linux
+  - binary
 ---
 
 ## objdump

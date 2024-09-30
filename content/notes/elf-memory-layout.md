@@ -1,7 +1,11 @@
 ---
 title: "Elf Memory Layout"
 date: 2024-09-25T08:51:39-07:00
-draft: true
+draft: false
+tags:
+  - notes
+  - elf
+  - binary
 ---
 
 The address layout of an elf binary in x86_64 after it has been loaded by the kernel.

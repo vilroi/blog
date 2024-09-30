@@ -8,6 +8,7 @@ categories:
   - default
 tags:
   - go
+  - binary
 ---
 
 An `interface` in Go is an abstract type used to categorize discrete types based on the actions it is able to take (the methods it implements). 

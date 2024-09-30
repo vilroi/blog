@@ -19,7 +19,7 @@ dataDir      = "data"
 layoutDir    = "layouts"
 publishDir   = "public"
 
-buildDrafts  = false
+buildDrafts  = true
 buildFuture  = false
 buildExpired = false
 canonifyURLs = true
@@ -241,3 +241,12 @@ disableHugoGeneratorInject = false
     identifier = "posts"
     name       = "Posts"
     url        = "posts/"
+  [[menu.main]]
+    identifier = "notes"
+    name       = "Notes"
+    url        = "notes/"
+
+  [[menu.main]]
+    identifier = "links"
+    name       = "Links"
+    url        = "links/"

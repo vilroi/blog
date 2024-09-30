@@ -1,7 +1,9 @@
 ---
 title: "ffmpeg Cheat Sheet"
 date: 2024-09-21T15:59:48-07:00
-draft: true
+draft: false
+tag:
+  - notes
 ---
 
 ## Format Conversion 
