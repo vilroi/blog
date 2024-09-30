@@ -1,5 +1,5 @@
 ---
-title: "Elf Memory Layout"
+title: "Elf Stack Layout"
 date: 2024-09-25T08:51:39-07:00
 draft: false
 tags:
@@ -8,7 +8,7 @@ tags:
   - binary
 ---
 
-The address layout of an elf binary in x86_64 after it has been loaded by the kernel.
+The stack layout of an elf binary in x86_64 linux, right after it has been loaded by the kernel.
 
 The original article can be found [here](https://web.archive.org/web/20200223015047/https://lwn.net/Articles/631631/).
 
