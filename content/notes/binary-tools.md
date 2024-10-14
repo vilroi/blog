@@ -10,7 +10,7 @@ tags:
 
 ## objdump
 
-Disassembling x86 binaries with `objdump`, outputting the result in intel syntax[^1]:
+Disassembling x86 binaries with `objdump`, outputting the result in intel syntax [^1]:
 
 ```console
 $ objdump -D -Mintel <file>
@@ -33,4 +33,11 @@ Disassembly of section .data:
 
 ```
 
+## objcopy
+Extracting the contents of a specified section [^2]:
+``` console
+$ objcopy --dump-section .text=output.bin input.o
+```
+
 [^1]: https://stackoverflow.com/questions/14290879/disassembling-a-flat-binary-file-using-objdump
+[^2]: https://stackoverflow.com/questions/3925075/how-to-extract-only-the-raw-contents-of-an-elf-section

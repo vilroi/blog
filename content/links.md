@@ -21,7 +21,10 @@ The author has no affiliations with the links posted on this page.
 
 ## Low Level
 - [cpplinks](https://github.com/MattPD/cpplinks/): An awesome list of resources related to debugging, instrumentation, assembly, etc.
+- [x8664 Linux syscall table](https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/)
 
 ## Rust
 - [Inline assembly](https://doc.rust-lang.org/reference/inline-assembly.html)
 - [Inline assembly examples](https://doc.rust-lang.org/rust-by-example/unsafe/asm.html)
+
+
