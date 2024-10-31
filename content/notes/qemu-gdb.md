@@ -33,6 +33,6 @@ gef➤  set architecture i8086
 ```
 
 ## References
-- https://www.qemu.org/docs/master/system/gdb.html
-- https://wiki.osdev.org/Real_Mode
-- https://stackoverflow.com/questions/14242958/debugging-bootloader-with-gdb-in-qemu
+- <https://www.qemu.org/docs/master/system/gdb.html>
+- <https://wiki.osdev.org/Real_Mode>
+- <https://stackoverflow.com/questions/14242958/debugging-bootloader-with-gdb-in-qemu>

@@ -43,4 +43,4 @@ $ ffmpeg -i input.webm -vf scale="720:480" output.webm
 ```
 
 ## Links
-- https://shotstack.io/learn/use-ffmpeg-to-trim-video/
+- <https://shotstack.io/learn/use-ffmpeg-to-trim-video/>

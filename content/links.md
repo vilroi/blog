@@ -13,11 +13,11 @@ The author has no affiliations with the links posted on this page.
 - [How Programs Get Run](https://web.archive.org/web/20200223015047/https://lwn.net/Articles/631631/) by lwn
 
 ## ABI
-- https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf
+- <https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf>
 
 ## C Runtime
 - [Hello from libc free world!](https://web.archive.org/web/20170806145040/https://blogs.oracle.com/ksplice/hello-from-a-libc-free-world-part-1)
-- https://github.com/lpsantil/rt0?tab=readme-ov-file
+- <https://github.com/lpsantil/rt0?tab=readme-ov-file>
 
 ## Low Level
 - [cpplinks](https://github.com/MattPD/cpplinks/): An awesome list of resources related to debugging, instrumentation, assembly, etc.

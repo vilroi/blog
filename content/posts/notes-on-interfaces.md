@@ -207,7 +207,7 @@ We could deduce that we are indeed looking at the raw bytes of an `abi.Type` by 
 ```
 
 ## Further Reading and References
-- https://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go
-- https://research.swtch.com/interfaces
-- https://cloud.google.com/blog/topics/threat-intelligence/golang-internals-symbol-recovery/
+- <https://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go>
+- <https://research.swtch.com/interfaces>
+- <https://cloud.google.com/blog/topics/threat-intelligence/golang-internals-symbol-recovery/>
 - [The code used to determine the value of `moduledata.type`](https://github.com/vilroi/lab/tree/main/gomoduledata)
